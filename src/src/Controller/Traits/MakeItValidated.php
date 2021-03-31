@@ -12,7 +12,7 @@ trait MakeItValidated
      * @param AbstractRequestValidator $validator
      * @param Request $request
      */
-    private function responseAsInvalid(AbstractRequestValidator $validator, Request $request): void
+    private function validate(AbstractRequestValidator $validator, Request $request): void
     {
         if (!$validator->validate($request)) {
             throw new HttpException(422, "Input Validation Error");

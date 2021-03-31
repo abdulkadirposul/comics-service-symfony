@@ -12,14 +12,10 @@ class ComicsIndexValidator extends AbstractRequestValidator
 
     protected function parseRequest(Request $request): array
     {
-        $returnArray = [
-            'xkcd_length' => 30,
-            'poorly_drawn_lines_length' => 30,
-        ];
+        $returnArray = $this->prepareDefaults($request);
 
         if ($request->query->has('xkcd_length')) {
             $returnArray['xkcd_length'] = $this->tryToConvertToInteger($request->query->get('xkcd_length'));
-
         }
 
         if ($request->query->has('poorly_drawn_lines_length')) {
@@ -41,5 +37,27 @@ class ComicsIndexValidator extends AbstractRequestValidator
                 new Assert\Range(['min' => 0, 'max' => 30])
             ],
         ]);
+    }
+
+    private function prepareDefaults(Request $request): array
+    {
+        $defaults = [
+            'xkcd_length' => 30,
+            'poorly_drawn_lines_length' => 30,
+        ];
+
+        if (!$request->query->has("xkcd_length")) {
+            $request->query->add([
+                'xkcd_length' => $defaults['xkcd_length']
+            ]);
+        }
+
+        if (!$request->query->has("poorly_drawn_lines_length")) {
+            $request->query->add([
+                'poorly_drawn_lines_length' => $defaults['poorly_drawn_lines_length']
+            ]);
+        }
+
+        return $defaults;
     }
 }

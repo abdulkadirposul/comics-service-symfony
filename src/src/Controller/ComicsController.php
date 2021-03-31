@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Controller\Traits\MakeItValidated;
+use App\Fetcher\FetcherPreparer;
+use App\Service\Contracts\ComicsServiceContract;
 use App\Validator\ComicsIndexValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +18,14 @@ class ComicsController extends AbstractController
     /**
      * @Route("/comics", name="comics")
      * @param Request $request
+     * @param ComicsServiceContract $comicsService
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request, ComicsServiceContract $comicsService, FetcherPreparer $fetcherPreparer): Response
     {
         $validator = new ComicsIndexValidator();
-        $this->responseAsInvalid($validator, $request);
+        $this->validate($validator, $request);
 
-        return new Response("111");
+        return new Response($comicsService->getComics($fetcherPreparer->handle($request->query->all())));
     }
 }
