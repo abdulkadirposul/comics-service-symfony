@@ -2,8 +2,23 @@
 
 namespace App\Fetcher;
 
+use App\Fetcher\Abstracts\PoorlyDrawnLinesFetcherAbstract;
+use App\Fetcher\Abstracts\XkcdFetcherAbstract;
+
 class FetcherPreparer
 {
+    private XkcdFetcherAbstract $xkcdFetcher;
+    private PoorlyDrawnLinesFetcherAbstract $poorlyDrawnLinesFetcher;
+
+    public function __construct(
+        XkcdFetcherAbstract $xkcdFetcher,
+        PoorlyDrawnLinesFetcherAbstract $poorlyDrawnLinesFetcher
+    )
+    {
+        $this->xkcdFetcher = $xkcdFetcher;
+        $this->poorlyDrawnLinesFetcher = $poorlyDrawnLinesFetcher;
+    }
+
     public function handle(array $params): array
     {
         $returnArray = [];
@@ -19,21 +34,19 @@ class FetcherPreparer
      * @param int $xkcdLength
      * @return XkcdFetcher
      */
-    private function handleXkcdFetcher(int $xkcdLength): XkcdFetcher
+    private function handleXkcdFetcher(int $xkcdLength): XkcdFetcherAbstract
     {
-        $xkcdFetcher = new XkcdFetcher();
-        $xkcdFetcher->setLength($xkcdLength);
-        return $xkcdFetcher;
+        $this->xkcdFetcher->setLength($xkcdLength);
+        return $this->xkcdFetcher;
     }
 
     /**
      * @param int $poorlyDrawnLinesLength
-     * @return PoorlyDrawLinesFetcher
+     * @return PoorlyDrawnLinesFetcher
      */
-    private function handlePoorlyDrawLinesFetcher(int $poorlyDrawnLinesLength): PoorlyDrawLinesFetcher
+    private function handlePoorlyDrawLinesFetcher(int $poorlyDrawnLinesLength): PoorlyDrawnLinesFetcherAbstract
     {
-        $poorlyDrawnLinesFetcher = new PoorlyDrawLinesFetcher();
-        $poorlyDrawnLinesFetcher->setLength($poorlyDrawnLinesLength);
-        return $poorlyDrawnLinesFetcher;
+        $this->poorlyDrawnLinesFetcher->setLength($poorlyDrawnLinesLength);
+        return $this->poorlyDrawnLinesFetcher;
     }
 }

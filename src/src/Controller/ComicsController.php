@@ -19,6 +19,7 @@ class ComicsController extends AbstractController
      * @Route("/comics", name="comics")
      * @param Request $request
      * @param ComicsServiceContract $comicsService
+     * @param FetcherPreparer $fetcherPreparer
      * @return Response
      */
     public function index(Request $request, ComicsServiceContract $comicsService, FetcherPreparer $fetcherPreparer): Response

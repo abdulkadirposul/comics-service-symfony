@@ -2,7 +2,7 @@
 
 namespace App\Fetcher\Abstracts;
 
-abstract class PoorlyDrawLinesFetcherAbstract extends FetcherAbstract
+abstract class PoorlyDrawnLinesFetcherAbstract extends FetcherAbstract
 {
 
 }
