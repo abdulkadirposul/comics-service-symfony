@@ -4,6 +4,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class ComicsControllerIndexTest extends WebTestCase
 {
+    private static string $url;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$url = "/comics";
+    }
+
     /**
      * A test to check if status code is successful
      *
@@ -11,6 +18,10 @@ final class ComicsControllerIndexTest extends WebTestCase
      */
     public function testStatusCode(): void
     {
+        $client = ComicsControllerIndexTest::createClient();
+        $client->request('GET', self::$url);
+
+        $this->assertResponseIsSuccessful();
     }
 
     /**
@@ -20,6 +31,12 @@ final class ComicsControllerIndexTest extends WebTestCase
      */
     public function testRequestHasNoParams(): void
     {
+        $client = ComicsControllerIndexTest::createClient();
+        $client->request('GET', self::$url);
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSame(20, count($response));
 
     }
 
@@ -30,7 +47,18 @@ final class ComicsControllerIndexTest extends WebTestCase
      */
     public function testResponseStructure(): void
     {
+        $url = self::$url . "?xkcd_length=1&poorly_drawn_lines_length=1";
+        $client = ComicsControllerIndexTest::createClient();
+        $client->request('GET', $url);
+        $response = json_decode($client->getResponse()->getContent(), true);
 
+        foreach ($response as $item) {
+            $this->assertTrue(isset($item["picture_url"]));
+            $this->assertTrue(isset($item["title"]));
+            $this->assertTrue(isset($item["description"]));
+            $this->assertTrue(isset($item["web_url"]));
+            $this->assertTrue(isset($item["publishing_date"]));
+        }
     }
 
     /**
@@ -42,7 +70,13 @@ final class ComicsControllerIndexTest extends WebTestCase
      */
     public function testRequestWithValidParams(int $xkcdLength, int $poorlyDrawLinesLength, int $expectedLength): void
     {
+        $url = self::$url . "?xkcd_length=".$xkcdLength . "&poorly_drawn_lines_length=".$poorlyDrawLinesLength;
+        $client = ComicsControllerIndexTest::createClient();
+        $client->request('GET', $url);
+        $response = json_decode($client->getResponse()->getContent(), true);
 
+        $this->assertResponseIsSuccessful();
+        $this->assertSame($expectedLength, count($response));
     }
 
     /**
@@ -53,7 +87,11 @@ final class ComicsControllerIndexTest extends WebTestCase
      */
     public function testRequestWithInvalidParams(int $xkcdLength, int $poorlyDrawLinesLength): void
     {
+        $url = self::$url . "?xkcd_length=".$xkcdLength . "&poorly_drawn_lines_length=".$poorlyDrawLinesLength;
+        $client = ComicsControllerIndexTest::createClient();
+        $client->request('GET', $url);
 
+        $this->assertResponseStatusCodeSame(422);
     }
 
     /**

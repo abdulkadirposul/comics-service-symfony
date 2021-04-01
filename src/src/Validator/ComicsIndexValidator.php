@@ -42,8 +42,8 @@ class ComicsIndexValidator extends AbstractRequestValidator
     private function prepareDefaults(Request $request): array
     {
         $defaults = [
-            'xkcd_length' => 30,
-            'poorly_drawn_lines_length' => 30,
+            'xkcd_length' => 10,
+            'poorly_drawn_lines_length' => 10,
         ];
 
         if (!$request->query->has("xkcd_length")) {
