@@ -16,7 +16,10 @@ class ComicsService implements ComicsServiceContract
             $returnArray = array_merge($returnArray, $fetcher->fetch());
         }
 
-        dd($returnArray);
+        usort($returnArray, function ($a, $b) {
+           return $a["publishing_date"] < $b["publishing_date"];
+        });
+
         return $returnArray;
     }
 }
