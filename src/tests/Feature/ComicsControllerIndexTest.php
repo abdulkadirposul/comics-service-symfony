@@ -8,7 +8,7 @@ final class ComicsControllerIndexTest extends WebTestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$url = "/comics";
+        self::$url = "/api/comics";
     }
 
     /**
