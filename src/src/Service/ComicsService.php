@@ -9,9 +9,14 @@ class ComicsService implements ComicsServiceContract
 {
     public function getComics(array $fetchers)
     {
+        $returnArray = [];
+
         /** @var FetcherAbstract $fetcher */
         foreach ($fetchers as  $fetcher) {
-            dump($fetcher->fetch());
+            $returnArray = array_merge($returnArray, $fetcher->fetch());
         }
+
+        dd($returnArray);
+        return $returnArray;
     }
 }
